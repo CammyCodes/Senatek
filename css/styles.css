@@ -1294,3 +1294,66 @@ h3 { font-size: clamp(1.25rem, 2.4vw, 1.6rem); }
   color: var(--text-faint);
 }
 @media (max-width: 900px) { .apply-box { position: static; } }
+
+/* ---------- Floating "Apply Now" pill (job detail pages, mobile/tablet) ----------
+   Injected by js/main.js on pages that have an .apply-box. Follows the reader up the
+   screen, drops away when the real .apply-box scrolls into view, and springs back up
+   (liquid-glass bounce) when it leaves. Hidden on desktop — there the .apply-box is
+   position:sticky and always visible, so a floating duplicate would be redundant. */
+.floating-apply {
+  display: none;
+  position: fixed;
+  left: 50%;
+  bottom: max(1.1rem, env(safe-area-inset-bottom, 0px));
+  z-index: 90;                 /* under the fixed nav (100) and mobile menu overlay (101) */
+  transform: translateX(-50%) translateY(240%);
+  opacity: 0;
+  pointer-events: none;
+  /* leaving: ease straight down */
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.6, 1), opacity 0.35s ease;
+}
+@media (max-width: 900px) { .floating-apply { display: block; } }
+
+.floating-apply.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+  /* entering: spring overshoot = the "bounce" */
+  transition: transform 0.66s cubic-bezier(0.34, 1.5, 0.5, 1), opacity 0.4s ease;
+}
+
+/* The pill itself — frosted amber "liquid glass" */
+.floating-apply-btn {
+  width: auto;
+  padding: 0.95rem 2.1rem;
+  color: #100a02;
+  background: linear-gradient(100deg, rgba(255, 184, 77, 0.9), rgba(247, 148, 29, 0.9) 55%, rgba(232, 114, 12, 0.9));
+  -webkit-backdrop-filter: blur(10px) saturate(1.25);
+  backdrop-filter: blur(10px) saturate(1.25);
+  border: 1px solid rgba(255, 214, 158, 0.55);
+  box-shadow:
+    0 12px 34px rgba(247, 148, 29, 0.45),
+    0 2px 10px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    inset 0 -2px 7px rgba(150, 66, 0, 0.35);
+}
+/* the pill's own transform is driven by the idle float below, so neutralise the
+   base .btn-primary:hover lift (it would fight the animation) */
+.floating-apply-btn:hover { box-shadow:
+  0 16px 42px rgba(247, 148, 29, 0.55),
+  0 2px 10px rgba(0, 0, 0, 0.35),
+  inset 0 1px 0 rgba(255, 255, 255, 0.6),
+  inset 0 -2px 7px rgba(150, 66, 0, 0.35); }
+
+/* gentle liquid idle bob once it has settled in */
+@keyframes fab-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+.floating-apply.show .floating-apply-btn {
+  animation: fab-float 3.2s ease-in-out 0.7s infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .floating-apply.show .floating-apply-btn { animation: none; }
+}

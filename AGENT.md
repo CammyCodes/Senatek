@@ -24,10 +24,10 @@ from the code alone.
   anything (GoDaddy, Netlify, Cloudflare Pages…).
 - **Files:** nineteen `.html` pages (six core pages + `jobs.html` + twelve job detail
   pages) · `css/styles.css` (design system) · `js/main.js` (nav, reveals, counters, streak
-  draw, embers, timeline, form toggle, job sector filter, job application prefill) ·
-  `images/` (brand reference JPEGs, `main-logo.png`, founder photos, Design1 doubles as OG
-  image) · `.claude/skills/job-listings/SKILL.md` (workflow reference for adding/editing/
-  removing job postings).
+  draw, embers, timeline, form toggle, job sector filter, job application prefill, floating
+  apply pill) · `images/` (brand reference JPEGs, `main-logo.png`, founder photos, Design1
+  doubles as OG image) · `.claude/skills/job-listings/SKILL.md` (workflow reference for
+  adding/editing/removing job postings).
 - **Branding:** `images/main-logo.png` — a transparent PNG cropped tightly to the wordmark
   (see §3.3 for how it was produced from the client's square source file) — is used as the
   nav and footer wordmark everywhere via `.brand-logo`, sized by height with its natural
@@ -63,12 +63,26 @@ from the code alone.
      `rgba(7,9,14,0.95)` background and **no** `backdrop-filter` — no blur, no containing
      block, overlay always fills the viewport. Desktop keeps the blur (its `.nav-links`
      is not `position: fixed`, so it was never affected). See §4 for the general gotcha.
-- **Cache-busting (v0.0.5):** the stylesheet is linked as `css/styles.css?v=0.0.5` on every
-  page. The `?v=` query is bumped whenever `styles.css` changes so browsers (and the Pages
-  CDN) fetch the new file instead of a stale cached copy. This matters especially when the
-  client previews via `file://` while iterating — browsers cache `file://` subresources
-  aggressively, so without the query bump an edit to the CSS may not show up on reload.
-  Keep the query in sync with the release version when you change the stylesheet.
+- **Floating "Apply Now" pill (v0.0.6):** on job detail pages, `js/main.js` injects a
+  fixed bottom-centre Apply pill (it clones the page's real `.apply-box .btn-primary`
+  href, so the per-job link is always correct — no per-page HTML). An IntersectionObserver
+  on `.apply-box` toggles a `.show` class: the pill is shown whenever the real apply panel
+  is *off* screen and drops away (slides down) when it scrolls into view, springing back up
+  with a bounce (spring `cubic-bezier` overshoot) plus a gentle idle float — a "liquid
+  glass" frosted-amber look (`backdrop-filter` blur + inset highlights). **Mobile/tablet
+  only** (`.floating-apply` is `display:none` above 900px): on desktop the `.apply-box` is
+  `position:sticky` and permanently visible, so a floating duplicate would be redundant and
+  would essentially never show. Note: the automated browser-preview pane does **not**
+  dispatch IntersectionObserver callbacks (it never has — that's why `.reveal` has to be
+  force-shown in test scripts), so this feature can't be exercised through it; verify in a
+  real browser at a mobile width.
+- **Cache-busting (v0.0.5+):** both shared assets are linked with a version query —
+  `css/styles.css?v=0.0.6` and `js/main.js?v=0.0.6` — on every page. The `?v=` is bumped
+  whenever `styles.css` **or** `js/main.js` changes so browsers (and the Pages CDN) fetch
+  the new file instead of a stale cached copy. This matters especially when the client
+  previews via `file://` while iterating — browsers cache `file://` subresources
+  aggressively, so without the query bump an edit may not show up on reload. Keep the query
+  in sync with the release version, and bump **both** links whenever either file changes.
 - **Native form control theming:** `color-scheme: dark` (root) plus explicit
   `<option>` background/color rules fix the sector `<select>` popup rendering with a
   white background in Chromium-based browsers.
@@ -94,7 +108,7 @@ from the code alone.
   `http://localhost:8000/index.html`. Opening files directly via `file://` mostly works
   too, but the sector-filter/apply-prefill JS and some relative asset paths behave more
   reliably over `http://`.
-- **Versioning:** annotated git tags `v0.0.1`–`v0.0.5`, bumped for most content/feature
+- **Versioning:** annotated git tags `v0.0.1`–`v0.0.6`, bumped for most content/feature
   changes (see table below). Not every commit gets a new tag — small content-only changes
   (e.g. adding/restoring a job posting) have shipped as plain commits on top of the current
   tag when the user asked to "keep this as vX" rather than bump. Check `git tag -n99` for
@@ -119,6 +133,8 @@ from the code alone.
 | `v0.0.4` (same tag, later commits) | `b32c9a8` | Restored the 4 postings removed in `5769b06` after Jordan confirmed they represent real roles Senatek has (they'd been drafted by the agent as samples, so the agent checked before re-listing them) — `jobs.html` now carries 12 live postings total. |
 | `v0.0.4` (same tag, later commits) | `621fb15` | README overhauled into a full agent handbook — no site behaviour changed. Later split into README.md (business/content reference) + this file (technical/agent reference) — see the current commit. |
 | `v0.0.5` | `094c619` | Two real mobile-nav bugs found and fixed (see §1's "Mobile nav — three separate fixes"): (1) the full-screen menu overlay bled page content through for ~0.4s because it faded whole-element `opacity` including its own solid background — fixed by toggling the backdrop with `visibility` (always opaque) and animating only the menu items on top of it; (2) the real culprit for "only glitches when scrolled" — `.nav.scrolled`'s `backdrop-filter` made the nav the containing block for the fixed-position overlay, collapsing it down to the ~82px nav-bar height whenever the menu was opened while scrolled — fixed by dropping `backdrop-filter` (and using a near-solid background instead) on the scrolled nav at mobile widths only; desktop is unaffected. Stylesheet cache-busted to `?v=0.0.5` on every page. |
+| — | `9357e63` | Docs reorg: split the old single README into README.md (business/content reference) + AGENT.md (this file — technical/dev reference), and removed all references to the external site the design was benchmarked against (client request). No site behaviour changed. |
+| `v0.0.6` | *(pending)* | Floating "Apply Now" pill on job detail pages (mobile/tablet) — a fixed bottom-centre CTA injected by `js/main.js` that follows the reader, drops away when the real `.apply-box` is on screen, and springs back up with a liquid-glass bounce + idle float. See §1's "Floating Apply Now pill". Also extended cache-busting to `js/main.js` (both shared assets now carry `?v=0.0.6`). |
 
 ---
 

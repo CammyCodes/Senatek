@@ -748,6 +748,36 @@
     }
   }
 
+  /* ---------- Job detail: floating "Apply Now" pill ----------
+     Only exists on pages with an .apply-box (the job detail pages). Mirrors the real
+     Apply Now link, follows the reader, and hides while the real apply panel is on
+     screen (CSS restricts it to mobile/tablet — see .floating-apply). */
+  var applyBox = document.querySelector(".apply-box");
+  var applyPrimary = applyBox ? applyBox.querySelector(".btn-primary") : null;
+  if (applyBox && applyPrimary) {
+    var fab = document.createElement("div");
+    fab.className = "floating-apply";
+    var fabBtn = document.createElement("a");
+    fabBtn.className = "btn btn-primary floating-apply-btn";
+    fabBtn.setAttribute("href", applyPrimary.getAttribute("href"));
+    fabBtn.innerHTML =
+      'Apply Now <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+    fab.appendChild(fabBtn);
+    document.body.appendChild(fab);
+
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(
+        function (entries) {
+          // show the pill whenever the real apply panel is NOT on screen
+          fab.classList.toggle("show", !entries[0].isIntersecting);
+        },
+        { threshold: 0, rootMargin: "0px 0px -15% 0px" }
+      ).observe(applyBox);
+    } else {
+      fab.classList.add("show");
+    }
+  }
+
   /* ---------- Footer year ---------- */
   var yearEl = document.getElementById("year");
   if (yearEl) yearEl.textContent = new Date().getFullYear();
