@@ -1,8 +1,18 @@
 # Senatek Recruitment — Website Documentation
 
 > Project reference for the Senatek Recruitment website: company research, brand system,
-> page-by-page content map, technical notes and outstanding items.
-> Last updated: 20 July 2026.
+> page-by-page content map, technical notes, deployment info and outstanding items.
+> Last updated: 20 July 2026 (v0.0.4).
+
+**Quick orientation for an agent picking this up cold:** static HTML/CSS/JS, no build
+step, no CMS, no backend — every page is a hand-authored file you edit directly. Live at
+**https://cammycodes.github.io/Senatek/** (GitHub Pages, `CammyCodes/Senatek`, deployed
+from `master`). Full deployment details and version history: §6. Job postings are the one
+piece of content that changes often — use the **`job-listings` skill**
+(`.claude/skills/job-listings/SKILL.md`) rather than re-deriving the pattern, and always
+reproduce a supplied job posting's wording **verbatim** (see §4). Read this file before
+making changes; it has caught real bugs and stale-copy issues that weren't obvious from
+the code alone.
 
 ---
 
@@ -109,9 +119,13 @@ headline, icons, CTAs) so it stays electric against the dark canvas.
 - Fluid sizing via `clamp()` throughout; hero display ~2.6–4.9rem.
 
 ### Wordmark
-Recreated in HTML/CSS (no logo file exists yet): `SENATEK` in white Space Grotesk with a
-small **orange triangle apex above the A** (`.a-mark`), `RECRUITMENT` letter-spaced in
-amber beneath.
+`images/main-logo.png` — a real logo file (transparent PNG, processed from the client's
+square source JPEG; see §7.3 in Outstanding items for how). `SENATEK` in white with a
+small **orange triangle apex above the A** and a thin amber underline glow, used via the
+`.brand-logo` class in the nav and footer on every page. Earlier versions of this site
+(pre-v0.0.3) recreated the wordmark in HTML/CSS text since no logo file existed yet —
+that approach has been fully replaced; there is no text-wordmark fallback in the current
+codebase.
 
 ### Signature motifs & effects
 - **Light-streak arc** — animated SVG paths (stroke-dash draw-on) sweeping across the
@@ -148,7 +162,7 @@ Explore links, Sector links, contact details, company number line).
 1. Page hero — "Built to power tomorrow's workforce".
 2. **Our Story** — founded 2025 by Jordan Camm; why the four-sector focus; delivery promise.
 3. **Values** — 01 Partnership · 02 Precision · 03 Pace · 04 Integrity.
-4. **Founder section** — photo frame (currently a styled "JC" placeholder — see §6),
+4. **Founder section** — photo frame showing `images/Jordan1.jpeg` (real headshot, see §7.1),
    bio, pull-quote *"Behind every project powering tomorrow, there's a person who made it
    happen. My job is finding them."*, Email + LinkedIn buttons.
 5. CTA band.
@@ -197,7 +211,7 @@ reference needed to keep them in sync.
    (location, salary, employment type).
 2. **`.job-figure`** — a gradient + line-icon visual panel keyed to the role's sector,
    captioned *"Real photography incoming"* (placeholder until real site/office photography
-   is supplied — see §6).
+   is supplied — see §7.4).
 3. Two-column **body**: narrative copy in named sections (each role keeps its own original
    section headers as supplied — e.g. "Key Responsibilities" vs "What You'll Be Doing",
    "Requirements" vs "About You" vs "What We're Looking For", "Benefits" vs "Salary &
@@ -256,7 +270,7 @@ and every section verbatim — in addition to the existing `?type=client|candida
   image) · `.claude/skills/job-listings/SKILL.md` (workflow reference for adding/editing/
   removing job postings).
 - **Branding:** `images/main-logo.png` — a transparent PNG cropped tightly to the wordmark
-  (see §6.3 for how it was produced from the client's square source file) — is used as the
+  (see §7.3 for how it was produced from the client's square source file) — is used as the
   nav and footer wordmark everywhere via `.brand-logo`, sized by height with its natural
   aspect ratio.
 - **SEO:** unique title/meta description + OG tags per page; Organization JSON-LD on the
@@ -279,7 +293,52 @@ and every section verbatim — in addition to the existing `?type=client|candida
 
 ---
 
-## 6. Outstanding items / swap-in points
+## 6. Deployment & repository
+
+- **Repository:** [github.com/CammyCodes/Senatek](https://github.com/CammyCodes/Senatek)
+  (GitHub account: CammyCodes). Single branch, `master` — no `develop`/feature-branch
+  workflow in use; commits go straight to `master`.
+- **Live site:** **https://cammycodes.github.io/Senatek/** — GitHub Pages, configured to
+  build from the `master` branch root (no `/docs` folder, no build step — it serves the
+  repo's HTML files directly). Pushing to `master` redeploys automatically, usually live
+  within a minute or two.
+- **Production domain:** the site is written to eventually replace the placeholder at
+  [senatekrecruitment.com](https://senatekrecruitment.com/) (see §1), but that domain is
+  **not currently pointed** at this repo/Pages site — the GitHub Pages URL above is the
+  only live URL right now. Pointing the custom domain (CNAME/DNS + a `CNAME` file in the
+  repo) is not yet done.
+- **Local preview:** no dev server needed — from the repo root run
+  `python -m http.server 8000` (or any static file server) and open
+  `http://localhost:8000/index.html`. Opening files directly via `file://` mostly works
+  too, but the sector-filter/apply-prefill JS and some relative asset paths behave more
+  reliably over `http://`.
+- **Versioning:** annotated git tags `v0.0.1`–`v0.0.4`, bumped for most content/feature
+  changes (see table below). Not every commit gets a new tag — small content-only changes
+  (e.g. adding/restoring a job posting) have shipped as plain commits on top of the current
+  tag when the user asked to "keep this as vX" rather than bump. Check `git tag -n99` for
+  the authoritative list and `git log --oneline` for the full commit history; don't assume
+  the tag list alone tells the whole story.
+- **Commit convention:** descriptive commit messages, `Co-Authored-By: Claude Sonnet 5
+  <noreply@anthropic.com>` trailer on AI-assisted commits, annotated tags
+  (`git tag -a vX.Y.Z -m "..."`) with both the commit and the tag pushed
+  (`git push origin master && git push origin vX.Y.Z`). Ask the user for the target
+  version number rather than assuming whether/how far to bump it.
+
+### Version history
+
+| Tag | Commit | What shipped |
+|---|---|---|
+| `v0.0.1` | `d09cd63` | Initial site: home, about, sectors, clients, candidates, contact — six core pages, full design system, coded text wordmark (no logo file yet). |
+| — | `178b3b7` | Hid the browser scrollbar while preserving scroll behaviour (`overflow` + `scrollbar-width`/`::-webkit-scrollbar` trick). |
+| `v0.0.2` | `fcb7218` | Added the Job Opportunities section: `jobs.html` listing page (sector filter, card grid) + 4 job detail pages (drafted by the agent as samples to demonstrate the pattern; Jordan later confirmed they represent real roles — see `b32c9a8`). |
+| `v0.0.3` | `d3809a8` | Real branding pass: client-supplied logo and founder photo wired in (still JPEG, still visibly boxed at this point — see below), job Apply buttons made to auto-fill the contact form (sector + full role text) via a `?job=` param and a `JOBS` object in `js/main.js`, sector `<select>` dark-theme fix, and a real mobile-nav bug fixed (full-screen overlay rendered incorrectly when opened partway down a scrolled page — root-caused to a `position:fixed`/scroll-offset interaction and fixed with a JS scroll-lock). |
+| `v0.0.4` | `5769b06` | Logo fixed properly: the v0.0.3 logo was a square JPEG with a visible black background box wherever it wasn't over pure black — cropped it to the wordmark band and matted it to a transparent PNG (`images/main-logo.png`) via Pillow. The 4 agent-drafted sample postings from v0.0.2 were removed and replaced with 7 real briefs supplied by the client, each keeping its own original section headers rather than a forced template. (The 4 removed postings later came back — see `b32c9a8`.) |
+| `v0.0.4` (same tag, later commits) | `71d6b90` | Added an 8th real role (Key Account Manager – Data Centre Solutions) and the `.claude/skills/job-listings/SKILL.md` skill so future job-posting changes don't require re-deriving the three-file pattern from scratch. |
+| `v0.0.4` (same tag, later commits) | `b32c9a8` | Restored the 4 postings removed in `5769b06` after Jordan confirmed they represent real roles Senatek has (they'd been drafted by the agent as samples, so the agent checked before re-listing them) — `jobs.html` now carries 12 live postings total. |
+
+---
+
+## 7. Outstanding items / swap-in points
 
 1. **Founder photo** — done (v0.0.3). `about.html`'s founder frame now shows
    `images/Jordan1.jpeg`. A second option, `images/Jordan2.jpeg`, is also in the repo if a
@@ -299,13 +358,60 @@ and every section verbatim — in addition to the existing `?type=client|candida
    the source with a transparent background directly) before dropping it in.
 4. **Job posting photography** — each job detail page's `.job-figure` banner is currently
    a styled gradient + line-icon placeholder (captioned "Real photography incoming"),
-   matching the founder-photo treatment in §6.1 pre-swap. Swap in real site/office
+   matching the founder-photo treatment in §7.1 pre-swap. Swap in real site/office
    photography per role when available — the markup comment in each `job-*.html` marks
    the spot.
 5. **Job postings are live** — done (v0.0.4). The twelve roles on `jobs.html` (see §4 table)
-   are real briefs, not placeholders. To add, remove or edit a posting, use the
-   `job-listings` skill (see §4).
+   are live postings. Two origins worth knowing about: eight arrived as **verbatim briefs
+   from Jordan** (their wording must never be paraphrased), and four (BD Director – Data
+   Centres, HV Project Manager, M&E Contract Manager, BESS Project Manager) were
+   **agent-drafted samples** that Jordan later confirmed represent real roles Senatek has
+   and asked to be listed. If Jordan later sends real ad copy for any of those four,
+   replace the drafted wording with the supplied copy. To add, remove or edit any posting,
+   use the `job-listings` skill (see §4).
 6. **Future additions (out of scope for v1):** contract/interim services, testimonials/
    client logos, insights/blog, privacy policy page (worth adding before the form goes
    live), analytics, and (longer-term) turning the jobs board into a CMS-backed listing
    if the number of live roles grows beyond what's practical to hand-maintain.
+
+---
+
+## 8. Working notes for agents
+
+Hard-won specifics that aren't obvious from the code and have bitten before:
+
+- **Nav/footer are duplicated in every HTML file.** There's no shared include — a nav or
+  footer change (new link, logo swap, label change) must be applied to **all nineteen**
+  pages. Grep to verify a sweep landed everywhere, e.g.
+  `grep -c "main-logo.png" *.html` should return 2 per page (nav + footer).
+- **Job postings live in three places** (detail page, `jobs.html` card, `JOBS` entry in
+  `js/main.js`) — the `job-listings` skill is the canonical how-to. After editing
+  `main.js`, run `node -c js/main.js` to catch syntax slips before browser-testing.
+- **Reproduce supplied job-ad copy verbatim** — never paraphrase, condense, or normalise
+  section headers on real briefs. This is an explicit, repeated client requirement.
+- **Verify in a real browser before shipping.** Serve locally (`python -m http.server`)
+  and click through — several bugs here (mobile nav overlay, dropdown theming, logo box)
+  were invisible in the code and only found in the browser. For scroll-position-dependent
+  checks note that `scroll-behavior: smooth` on `<html>` makes programmatic
+  `window.scrollTo` animate (or appear to no-op in automation) — set
+  `document.documentElement.style.scrollBehavior = 'auto'` first in test scripts, which is
+  also why the nav scroll-lock restore in `main.js` passes `behavior: "instant"`.
+- **The `.reveal` animation hides content until scrolled into view.** In automated
+  screenshots, force it with
+  `document.querySelectorAll('.reveal').forEach(e => e.classList.add('in'))` — otherwise
+  below-the-fold sections screenshot as empty black.
+- **Don't reintroduce `backdrop-filter` on the mobile nav overlay** — it was deliberately
+  removed (see §5 mobile nav scroll-lock note) after rendering glitches; the flat opaque
+  `var(--bg)` background is intentional.
+- **Image processing:** no ImageMagick on this machine, but Python + Pillow is available
+  via `python` (not `python3`). The logo transparency recipe is in §7.3.
+- **Windows environment quirks:** the repo lives on `Y:\Github\Senatek`; the shell used
+  for automation is Git Bash (POSIX-style paths work). Line-ending warnings
+  (`LF will be replaced by CRLF`) on commit are normal and harmless here.
+- **Versioning is user-directed** — always confirm with the user whether a change bumps
+  the version tag or ships as a plain commit on the current tag (both have happened; see
+  §6 Version history).
+- **Update this README as part of any change** that alters pages, roles, assets, or
+  workflow — stale counts and cross-references here have caused real confusion. The job
+  table (§4), file counts (§5), version history (§6), and outstanding items (§7) are the
+  usual suspects.

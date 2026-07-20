@@ -162,13 +162,15 @@ is filled with the exact role text.
 
 ## Committing
 
-This repo tags a version bump for every content/feature change that ships (see `git log` /
-`git tag` for the pattern — v0.0.1 through v0.0.4 so far). After a jobs change:
+After a jobs change:
 
-1. Update `README.md`'s job listing table (§4, `### jobs.html — Job Opportunities`) to match
-   current live roles if the roster changed.
+1. Update `README.md` to match: the job listing table and role count (§4), the file count
+   (§5), and — if the change is notable — the version history table (§6).
 2. `git add`, commit with a message describing what changed (which roles added/edited/removed).
-3. Bump the patch version (`git tag -a v0.0.X -m "..."`) and push both the commit and the tag:
-   `git push origin master && git push origin v0.0.X`.
+3. **Ask the user whether this change bumps the version tag.** Feature releases have been
+   tagged (`v0.0.1`–`v0.0.4` so far, annotated tags), but content-only job changes have
+   also shipped as plain commits on the current tag when the user said to keep the version
+   — both are established. If tagging: `git tag -a v0.0.X -m "..."` then push both:
+   `git push origin master && git push origin v0.0.X`. If not: just `git push origin master`.
 
-Ask the user for the target version number if it isn't already stated in their request.
+The site is GitHub Pages off `master` — pushing deploys it live within a minute or two.
