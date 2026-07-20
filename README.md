@@ -2,7 +2,7 @@
 
 > Project reference for the Senatek Recruitment website: company research, brand system,
 > page-by-page content map, technical notes and outstanding items.
-> Last updated: 18 July 2026.
+> Last updated: 20 July 2026.
 
 ---
 
@@ -21,8 +21,8 @@ consultancy. The site's job is to:
 It replaces the previous one-page GoDaddy placeholder at
 [senatekrecruitment.com](https://senatekrecruitment.com/).
 
-**Current scope:** permanent recruitment only (no contract/interim, no jobs board — both
-can be added later).
+**Current scope:** permanent recruitment only (no contract/interim). A **Job Opportunities**
+board (`jobs.html` + individual role pages) launched in v0.0.2 with four example postings.
 
 ---
 
@@ -126,9 +126,9 @@ amber beneath.
 
 ## 4. Site structure — what's on each page
 
-Shared on every page: fixed glass **nav** (Home / About / Sectors / For Clients /
-For Candidates + "Get in Touch" CTA) and **footer** (wordmark + blurb, Explore links,
-Sector links, contact details, company number line).
+Shared on every page: fixed glass **nav** (Home / About / Sectors / Job Opportunities /
+For Clients / For Candidates + "Get in Touch" CTA) and **footer** (wordmark + blurb,
+Explore links, Sector links, contact details, company number line).
 
 ### `index.html` — Home
 1. **Hero** — animated light streaks + embers, eyebrow "Specialist Recruitment · UK & Europe",
@@ -158,6 +158,36 @@ Sector links, contact details, company number line).
    `#building-services`, `#renewables`), each with a glowing icon panel, sector narrative
    and pill **role tags** (roles listed in §2).
 3. CTA band with both client and candidate CTAs.
+
+### `jobs.html` — Job Opportunities
+1. Page hero — "Roles powering tomorrow" + intro noting many roles are never advertised.
+2. **Sector filter bar** — All / Power & Energy / Data Centres / Building Services /
+   Renewables pills, filters the grid client-side (`js/main.js`), with a "no results"
+   message for empty sectors.
+3. **Job card grid** (2-column, `.job-grid` / `.job-card`) — each card shows sector tag,
+   icon, title, **location & salary meta pills**, teaser and a *View Role* link through to
+   its own detail page.
+4. CTA band — "The best roles are never advertised" + Register Your Interest / Email CV.
+
+Four example postings ship at launch, one per sector, each its own detail page:
+`job-bd-director-data-centres.html`, `job-hv-project-manager.html`,
+`job-me-contract-manager.html`, `job-bess-project-manager.html`.
+
+**Job detail page pattern** (all four follow it):
+1. Page hero — back-link to `jobs.html`, sector eyebrow, job title, meta pills
+   (location, salary, employment type).
+2. **`.job-figure`** — a gradient + line-icon visual panel keyed to the role's sector,
+   captioned *"Real photography incoming"* (placeholder until real site/office photography
+   is supplied — see §6).
+3. Two-column **body**: narrative copy + **Key Requirements** checklist (amber ticks) on
+   the left; a **sticky apply box** on the right (*Apply Now* → `contact.html?type=
+   candidate&role=…`, *Email Your CV* mailto with the role in the subject line).
+4. CTA band linking back to the full list / Register Your Interest.
+5. Per-role **`JobPosting` JSON-LD** (title, description, salary, location, employment
+   type) for Google Jobs eligibility.
+
+The contact form (`js/main.js`) reads a `?role=` query param and pre-fills the message
+field with the role name, in addition to the existing `?type=client|candidate` toggle.
 
 ### `clients.html` — For Clients
 1. Page hero — "Hires that stick" + *Brief a Role* CTA.
@@ -189,12 +219,14 @@ Sector links, contact details, company number line).
 
 - **Stack:** static HTML + CSS + vanilla JS. No framework, no build step. Hostable on
   anything (GoDaddy, Netlify, Cloudflare Pages…).
-- **Files:** six `.html` pages · `css/styles.css` (design system) · `js/main.js`
-  (nav, reveals, counters, streak draw, embers, timeline, form toggle) ·
+- **Files:** eleven `.html` pages (six core pages + `jobs.html` + four job detail pages) ·
+  `css/styles.css` (design system) · `js/main.js` (nav, reveals, counters, streak draw,
+  embers, timeline, form toggle, job sector filter, `?role=` prefill) ·
   `images/` (brand reference JPEGs, Design1 doubles as OG image).
 - **SEO:** unique title/meta description + OG tags per page; Organization JSON-LD on the
-  home page (includes founder, contact, areaServed, LinkedIn sameAs); semantic markup;
-  favicon is an inline SVG (orange apex mark on dark).
+  home page (includes founder, contact, areaServed, LinkedIn sameAs); `JobPosting` JSON-LD
+  on each job detail page; semantic markup; favicon is an inline SVG (orange apex mark on
+  dark).
 - **Accessibility:** aria-current nav states, aria labels on toggles, focus styles on
   inputs, `prefers-reduced-motion` support, `aria-live` form status.
 - **Responsive:** fluid type, grids collapse (4→2→1), split panels stack, nav becomes a
@@ -214,6 +246,15 @@ Sector links, contact details, company number line).
    `sector`, `message`, hidden `enquiry_type`).
 3. **Logo files** — no vector/PNG logo exists; the wordmark is coded in HTML/CSS. If a
    proper logo is produced later, swap it into `.brand` in the nav/footer.
-4. **Future additions (out of scope for v1):** jobs board, contract/interim services,
-   testimonials/client logos, insights/blog, privacy policy page (worth adding before
-   the form goes live), analytics.
+4. **Job posting photography** — each job detail page's `.job-figure` banner is currently
+   a styled gradient + line-icon placeholder (captioned "Real photography incoming"),
+   matching the founder-photo treatment in §6.1. Swap in real site/office photography per
+   role when available — the markup comment in each `job-*.html` marks the spot.
+5. **Job postings are illustrative** — the four roles on `jobs.html` are example/sample
+   postings drafted to demonstrate the page, not live vacancies. Replace with real briefs
+   (and add/remove postings) as roles come in; each is a self-contained HTML file so this
+   is a copy-and-content edit, no rebuild needed.
+6. **Future additions (out of scope for v1):** contract/interim services, testimonials/
+   client logos, insights/blog, privacy policy page (worth adding before the form goes
+   live), analytics, and (longer-term) turning the jobs board into a CMS-backed listing
+   if the number of live roles grows beyond what's practical to hand-maintain.

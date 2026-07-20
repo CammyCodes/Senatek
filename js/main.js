@@ -218,6 +218,38 @@
     });
   }
 
+  /* ---------- Jobs: sector filter ---------- */
+  var jobFilter = document.querySelector(".job-filter");
+  if (jobFilter) {
+    var filterBtns = jobFilter.querySelectorAll("button");
+    var jobCards = document.querySelectorAll(".job-card");
+    var noResults = document.getElementById("no-results");
+    filterBtns.forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var f = btn.getAttribute("data-filter");
+        filterBtns.forEach(function (b) { b.classList.toggle("active", b === btn); });
+        var shown = 0;
+        jobCards.forEach(function (card) {
+          var match = f === "all" || card.getAttribute("data-sector") === f;
+          card.style.display = match ? "" : "none";
+          if (match) shown++;
+        });
+        if (noResults) noResults.style.display = shown ? "none" : "";
+      });
+    });
+  }
+
+  /* ---------- Contact: prefill role from ?role= ---------- */
+  var messageField = document.getElementById("f-message");
+  if (messageField) {
+    var roleParam = new URLSearchParams(window.location.search).get("role");
+    if (roleParam) {
+      messageField.value = "I'd like to apply for: " + roleParam + "\n\n";
+      var caret = messageField.value.length;
+      messageField.setSelectionRange(caret, caret);
+    }
+  }
+
   /* ---------- Footer year ---------- */
   var yearEl = document.getElementById("year");
   if (yearEl) yearEl.textContent = new Date().getFullYear();
