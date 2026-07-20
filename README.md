@@ -22,7 +22,8 @@ It replaces the previous one-page GoDaddy placeholder at
 [senatekrecruitment.com](https://senatekrecruitment.com/).
 
 **Current scope:** permanent recruitment only (no contract/interim). A **Job Opportunities**
-board (`jobs.html` + individual role pages) launched in v0.0.2 with four example postings.
+board (`jobs.html` + individual role pages) launched in v0.0.2 and carries seven live
+postings as of v0.0.4 (see §4).
 
 ---
 
@@ -169,27 +170,41 @@ Explore links, Sector links, contact details, company number line).
    its own detail page.
 4. CTA band — "The best roles are never advertised" + Register Your Interest / Email CV.
 
-Four example postings ship at launch, one per sector, each its own detail page:
-`job-bd-director-data-centres.html`, `job-hv-project-manager.html`,
-`job-me-contract-manager.html`, `job-bess-project-manager.html`.
+**Seven live roles ship at launch** (real briefs supplied by Jordan, not placeholders),
+one detail page each:
 
-**Job detail page pattern** (all four follow it):
+| Detail page | Role | Sector |
+|---|---|---|
+| `job-head-of-solar-operations.html` | Head of Solar Operations (Solar & BESS) | Renewables & Energy Storage |
+| `job-commercial-gas-engineer-essex.html` | Commercial Gas Engineer | Building Services & Facilities |
+| `job-commercial-gas-engineer-guildford.html` | Commercial Gas Engineer | Building Services & Facilities |
+| `job-business-development-manager-power-energy.html` | Business Development Manager – Power & Energy Solutions | Power & Energy |
+| `job-regional-operations-director-data-centre.html` | Regional Operations Director – Data Centre Infrastructure | Critical Infrastructure & Data Centres |
+| `job-chief-operating-officer.html` | Chief Operating Officer (COO) | Renewables & Energy Storage |
+| `job-electrical-maintenance-engineer.html` | Electrical Maintenance Engineer – Commercial Building Services | Building Services & Facilities |
+
+**Job detail page pattern** (all seven follow it):
 1. Page hero — back-link to `jobs.html`, sector eyebrow, job title, meta pills
    (location, salary, employment type).
 2. **`.job-figure`** — a gradient + line-icon visual panel keyed to the role's sector,
    captioned *"Real photography incoming"* (placeholder until real site/office photography
    is supplied — see §6).
-3. Two-column **body**: narrative copy + **Key Requirements** checklist (amber ticks) on
-   the left; a **sticky apply box** on the right (*Apply Now* → `contact.html?type=
-   candidate&job=<slug>`, *Email Your CV* mailto with the role in the subject line).
+3. Two-column **body**: narrative copy in named sections (each role keeps its own original
+   section headers as supplied — e.g. "Key Responsibilities" vs "What You'll Be Doing",
+   "Requirements" vs "About You" vs "What We're Looking For", "Benefits" vs "Salary &
+   Benefits" vs "What's on Offer" — content is reproduced verbatim, not paraphrased) with
+   amber-tick checklists on the left; a **sticky apply box** on the right (*Apply Now* →
+   `contact.html?type=candidate&job=<slug>`, *Email Your CV* mailto with the role in the
+   subject line).
 4. CTA band linking back to the full list / Register Your Interest.
 5. Per-role **`JobPosting` JSON-LD** (title, description, salary, location, employment
    type) for Google Jobs eligibility.
 
 The contact form (`js/main.js`) reads the `?job=<slug>` query param, looks up the matching
-entry in the `JOBS` data object, selects the matching **Sector**, and pre-fills the message
-field with the full role — title, location, salary, description, Key Requirements and
-closing line — verbatim, in addition to the existing `?type=client|candidate` toggle.
+entry in the `JOBS` data object (each entry has a `sections` array of `{heading,
+paragraphs?, items?}` mirroring the detail page's own structure), selects the matching
+**Sector**, and pre-fills the message field with the full role — title, location, salary,
+and every section verbatim — in addition to the existing `?type=client|candidate` toggle.
 
 ### `clients.html` — For Clients
 1. Page hero — "Hires that stick" + *Brief a Role* CTA.
@@ -225,15 +240,15 @@ closing line — verbatim, in addition to the existing `?type=client|candidate` 
 
 - **Stack:** static HTML + CSS + vanilla JS. No framework, no build step. Hostable on
   anything (GoDaddy, Netlify, Cloudflare Pages…).
-- **Files:** eleven `.html` pages (six core pages + `jobs.html` + four job detail pages) ·
-  `css/styles.css` (design system) · `js/main.js` (nav, reveals, counters, streak draw,
-  embers, timeline, form toggle, job sector filter, job application prefill) ·
-  `images/` (brand reference JPEGs, `main-logo.jpeg`, founder photos, Design1 doubles as
-  OG image).
-- **Branding:** `images/main-logo.jpeg` (square, black background) is used as the nav and
-  footer wordmark everywhere via `.brand-logo` — a CSS `object-fit: cover` crop (see
-  `.brand-logo` in styles.css) trims the square mark down to just the wordmark band, so
-  it reads as a clean horizontal logo lockup rather than a square logo in a wide slot.
+- **Files:** fourteen `.html` pages (six core pages + `jobs.html` + seven job detail
+  pages) · `css/styles.css` (design system) · `js/main.js` (nav, reveals, counters, streak
+  draw, embers, timeline, form toggle, job sector filter, job application prefill) ·
+  `images/` (brand reference JPEGs, `main-logo.png`, founder photos, Design1 doubles as OG
+  image).
+- **Branding:** `images/main-logo.png` — a transparent PNG cropped tightly to the wordmark
+  (see §6.3 for how it was produced from the client's square source file) — is used as the
+  nav and footer wordmark everywhere via `.brand-logo`, sized by height with its natural
+  aspect ratio.
 - **SEO:** unique title/meta description + OG tags per page; Organization JSON-LD on the
   home page (includes founder, contact, areaServed, LinkedIn sameAs); `JobPosting` JSON-LD
   on each job detail page; semantic markup; favicon is an inline SVG (orange apex mark on
@@ -264,20 +279,25 @@ closing line — verbatim, in addition to the existing `?type=client|candidate` 
    when hosting is arranged; submissions should deliver to **Jordan@senatekrecruitment.com**.
    All fields are named and ready (`name`, `email`, `phone`, `company` / `current_role`,
    `sector`, `message`, hidden `enquiry_type`).
-3. **Logo files** — done (v0.0.3). `images/main-logo.jpeg` is now used everywhere via
-   `.brand-logo` (see §5). If a vector/transparent version is produced later, swap the
-   `src` in `.brand` — no CSS changes needed as long as the new asset is roughly square.
+3. **Logo files** — done (v0.0.3, cleaned up v0.0.4). The source `images/main-logo.jpeg`
+   the client supplied is a square asset on a solid black background. It's processed into
+   `images/main-logo.png` — cropped tightly to the wordmark band and matted to a
+   transparent background (via Pillow: alpha = max channel per pixel, unpremultiplied from
+   black) — so it sits cleanly on the dark theme with no visible logo tile/box, at any
+   scroll position or backdrop. `.brand-logo` sizes it by height with natural aspect ratio.
+   If a new logo file is supplied later, re-run the same crop-and-matte process (or ask for
+   the source with a transparent background directly) before dropping it in.
 4. **Job posting photography** — each job detail page's `.job-figure` banner is currently
    a styled gradient + line-icon placeholder (captioned "Real photography incoming"),
    matching the founder-photo treatment in §6.1 pre-swap. Swap in real site/office
    photography per role when available — the markup comment in each `job-*.html` marks
    the spot.
-5. **Job postings are illustrative** — the four roles on `jobs.html` are example/sample
-   postings drafted to demonstrate the page, not live vacancies. Replace with real briefs
-   (and add/remove postings) as roles come in; each is a self-contained HTML file so this
-   is a copy-and-content edit, no rebuild needed. Remember to also update (or add/remove)
-   the matching entry in the `JOBS` object in `js/main.js` so the Apply prefill stays in
-   sync with the page content.
+5. **Job postings are live** — done (v0.0.4). The seven roles on `jobs.html` (see §4 table)
+   are real briefs, not placeholders. To add, remove or edit a posting: it's a
+   self-contained HTML file (copy an existing `job-*.html` as a template), plus a matching
+   entry in the `JOBS` object in `js/main.js` (a `sections` array of `{heading,
+   paragraphs?, items?}`) so the Apply-page prefill stays in sync with the page content,
+   plus a card in `jobs.html`'s `.job-grid` with the correct `data-sector`.
 6. **Future additions (out of scope for v1):** contract/interim services, testimonials/
    client logos, insights/blog, privacy policy page (worth adding before the form goes
    live), analytics, and (longer-term) turning the jobs board into a CMS-backed listing

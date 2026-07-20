@@ -225,12 +225,10 @@ h3 { font-size: clamp(1.25rem, 2.4vw, 1.6rem); }
 .brand { display: flex; align-items: center; line-height: 1; z-index: 102; }
 .brand-logo {
   display: block;
-  height: 34px;
-  width: 158px;
-  object-fit: cover;
-  object-position: center 49%;
+  height: 30px;
+  width: auto;
 }
-.footer .brand-logo { height: 42px; width: 195px; }
+.footer .brand-logo { height: 38px; }
 
 .nav-links { display: flex; align-items: center; gap: 2.1rem; }
 .nav-links a:not(.btn) {
