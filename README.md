@@ -22,7 +22,7 @@ It replaces the previous one-page GoDaddy placeholder at
 [senatekrecruitment.com](https://senatekrecruitment.com/).
 
 **Current scope:** permanent recruitment only (no contract/interim). A **Job Opportunities**
-board (`jobs.html` + individual role pages) launched in v0.0.2 and carries seven live
+board (`jobs.html` + individual role pages) launched in v0.0.2 and carries twelve live
 postings as of v0.0.4 (see §4).
 
 ---
@@ -182,6 +182,10 @@ Explore links, Sector links, contact details, company number line).
 | `job-chief-operating-officer.html` | Chief Operating Officer (COO) | Renewables & Energy Storage |
 | `job-electrical-maintenance-engineer.html` | Electrical Maintenance Engineer – Commercial Building Services | Building Services & Facilities |
 | `job-key-account-manager-data-centre-solutions.html` | Key Account Manager – Data Centre Solutions | Critical Infrastructure & Data Centres |
+| `job-bd-director-data-centres.html` | Business Development Director – Data Centres | Critical Infrastructure & Data Centres |
+| `job-hv-project-manager.html` | HV Project Manager – Transmission & Distribution | Power & Energy |
+| `job-me-contract-manager.html` | Critical Facilities / M&E Contract Manager | Building Services & Facilities |
+| `job-bess-project-manager.html` | BESS Project Manager – Grid-Scale Storage | Renewables & Energy Storage |
 
 To add, edit, or remove a posting, use the **`job-listings` skill**
 (`.claude/skills/job-listings/SKILL.md`) — it documents the three places every job lives
@@ -245,7 +249,7 @@ and every section verbatim — in addition to the existing `?type=client|candida
 
 - **Stack:** static HTML + CSS + vanilla JS. No framework, no build step. Hostable on
   anything (GoDaddy, Netlify, Cloudflare Pages…).
-- **Files:** fifteen `.html` pages (six core pages + `jobs.html` + eight job detail
+- **Files:** nineteen `.html` pages (six core pages + `jobs.html` + twelve job detail
   pages) · `css/styles.css` (design system) · `js/main.js` (nav, reveals, counters, streak
   draw, embers, timeline, form toggle, job sector filter, job application prefill) ·
   `images/` (brand reference JPEGs, `main-logo.png`, founder photos, Design1 doubles as OG
@@ -298,12 +302,9 @@ and every section verbatim — in addition to the existing `?type=client|candida
    matching the founder-photo treatment in §6.1 pre-swap. Swap in real site/office
    photography per role when available — the markup comment in each `job-*.html` marks
    the spot.
-5. **Job postings are live** — done (v0.0.4). The seven roles on `jobs.html` (see §4 table)
-   are real briefs, not placeholders. To add, remove or edit a posting: it's a
-   self-contained HTML file (copy an existing `job-*.html` as a template), plus a matching
-   entry in the `JOBS` object in `js/main.js` (a `sections` array of `{heading,
-   paragraphs?, items?}`) so the Apply-page prefill stays in sync with the page content,
-   plus a card in `jobs.html`'s `.job-grid` with the correct `data-sector`.
+5. **Job postings are live** — done (v0.0.4). The twelve roles on `jobs.html` (see §4 table)
+   are real briefs, not placeholders. To add, remove or edit a posting, use the
+   `job-listings` skill (see §4).
 6. **Future additions (out of scope for v1):** contract/interim services, testimonials/
    client logos, insights/blog, privacy policy page (worth adding before the form goes
    live), analytics, and (longer-term) turning the jobs board into a CMS-backed listing

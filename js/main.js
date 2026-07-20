@@ -613,6 +613,98 @@
           "Supportive and collaborative working environment."
         ] }
       ]
+    },
+    "bd-director-data-centres": {
+      title: "Business Development Director – Data Centres",
+      sector: "Critical Infrastructure & Data Centres",
+      location: "UK & Ireland (Hybrid / Home-Based)",
+      salary: "£120,000–£150,000 + Bonus + Benefits",
+      sections: [
+        { heading: "The Opportunity", paragraphs: [
+          "We're recruiting on behalf of a global manufacturer of critical power and energy infrastructure for a senior commercial leadership role within its rapidly growing Data Centre division.",
+          "This is an opportunity to lead business development across the UK & Ireland, driving growth within the hyperscale, colocation and enterprise data centre sectors. You'll be responsible for developing strategic customer relationships, identifying new business opportunities and leading the pursuit of major infrastructure projects from early engagement through to contract award.",
+          "Working closely with engineering, technical and commercial teams, you'll help deliver tailored power solutions for mission-critical environments while strengthening the company's position within the UK & Ireland data centre market."
+        ] },
+        { heading: "Key Requirements", items: [
+          "Proven experience selling into the data centre sector.",
+          "Strong understanding of critical power, electrical infrastructure or mission-critical systems.",
+          "Experience managing complex, high-value sales opportunities.",
+          "Established relationships across the UK & Ireland data centre market.",
+          "Commercially driven with excellent stakeholder management and negotiation skills."
+        ] },
+        { heading: "Why This Role", paragraphs: [
+          "This is an excellent opportunity to join an internationally recognised business at a time of significant investment and growth within one of the fastest-growing sectors in infrastructure."
+        ] }
+      ]
+    },
+    "hv-project-manager": {
+      title: "HV Project Manager – Transmission & Distribution",
+      sector: "Power & Energy",
+      location: "North West England (Site-Based)",
+      salary: "£65,000–£80,000 + Car + Package",
+      sections: [
+        { heading: "The Opportunity", paragraphs: [
+          "We're partnering with a leading transmission & distribution contractor to find an experienced HV Project Manager to lead the delivery of substation and grid reinforcement schemes across the North West. With record investment flowing into network upgrades, this is a business with a full order book and a genuine pipeline of long-term work.",
+          "Reporting to the Contracts Director, you'll take end-to-end ownership of projects up to 132kV — managing programme, budget, safety and quality from mobilisation through to energisation. You'll lead multidisciplinary site teams and subcontractors, and act as the key point of contact for the client and DNO stakeholders throughout.",
+          "This is a hands-on leadership role for someone who knows what good looks like on an HV site, and who wants the autonomy to run their projects their way."
+        ] },
+        { heading: "Key Requirements", items: [
+          "Proven project management experience on HV substation or grid infrastructure projects.",
+          "Strong working knowledge of transmission & distribution networks up to 132kV.",
+          "A track record of delivering projects safely, on programme and on budget.",
+          "Confident managing site teams, subcontractors and DNO / client stakeholders.",
+          "NEBOSH / SMSTS and a relevant engineering qualification (HNC/HND/degree) preferred."
+        ] },
+        { heading: "Why This Role", paragraphs: [
+          "You'll join a contractor at the heart of the UK's grid transformation, with a secure pipeline, a supportive senior team and a clear route into a Senior PM or Contracts Manager position as the business grows."
+        ] }
+      ]
+    },
+    "me-contract-manager": {
+      title: "Critical Facilities / M&E Contract Manager",
+      sector: "Building Services & Facilities",
+      location: "London (Hybrid)",
+      salary: "£70,000–£85,000 + Benefits",
+      sections: [
+        { heading: "The Opportunity", paragraphs: [
+          "A market-leading building services provider is looking for a Critical Facilities / M&E Contract Manager to take ownership of hard-services delivery across a portfolio of high-profile commercial and mission-critical estates in central London.",
+          "You'll be accountable for the safe, compliant and efficient operation of building services across your sites — leading a team of shift and mobile engineers, managing planned and reactive maintenance, and holding the commercial performance of the contract. Working closely with the client, you'll drive continuous improvement, manage supply-chain partners and ensure critical systems never miss a beat.",
+          "It's a role that blends engineering leadership, client relationship management and commercial ownership — ideal for an M&E professional ready to step up and run a flagship contract."
+        ] },
+        { heading: "Key Requirements", items: [
+          "Strong M&E or building services background, ideally within critical environments.",
+          "Experience managing hard-services / FM contracts and leading engineering teams.",
+          "Sound understanding of statutory compliance, PPM regimes and SLA / KPI delivery.",
+          "Commercial awareness — P&L, budgets and supply-chain management.",
+          "Excellent client-facing and stakeholder communication skills."
+        ] },
+        { heading: "Why This Role", paragraphs: [
+          "You'll take the lead on a prestigious, high-visibility contract with a provider that invests in its people — with genuine scope to grow into a Senior or Account Director remit."
+        ] }
+      ]
+    },
+    "bess-project-manager": {
+      title: "BESS Project Manager – Grid-Scale Storage",
+      sector: "Renewables & Energy Storage",
+      location: "UK (Remote with site travel)",
+      salary: "£75,000–£95,000 + Bonus",
+      sections: [
+        { heading: "The Opportunity", paragraphs: [
+          "We're working with a fast-scaling energy storage developer to appoint a BESS Project Manager to lead the delivery of grid-scale battery projects across the UK. Backed by significant investment and a growing pipeline of consented sites, this is a business helping to balance the grid as renewables come online.",
+          "You'll own projects from financial close through construction to energisation and handover — managing EPC contractors, grid connection works, budgets and programme. Acting as the developer's representative on site, you'll drive safety, quality and commercial performance, and keep a wide group of stakeholders — from DNOs and National Grid to landowners and investors — aligned and informed.",
+          "This is a genuinely mission-led role at the sharp end of the energy transition, with the autonomy to shape how projects are delivered."
+        ] },
+        { heading: "Key Requirements", items: [
+          "Project management experience delivering BESS, solar, or grid-connection infrastructure.",
+          "Understanding of the grid connection process and DNO / National Grid requirements.",
+          "Experience managing EPC contractors and multi-million-pound project budgets.",
+          "Strong commercial, programme and stakeholder-management capability.",
+          "A relevant engineering or construction background and a full UK driving licence."
+        ] },
+        { heading: "Why This Role", paragraphs: [
+          "Join a developer at an inflection point, with a long-term pipeline, equity upside and the chance to build and lead a delivery team as the portfolio scales."
+        ] }
+      ]
     }
   };
 
