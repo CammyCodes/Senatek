@@ -170,8 +170,7 @@ Explore links, Sector links, contact details, company number line).
    its own detail page.
 4. CTA band — "The best roles are never advertised" + Register Your Interest / Email CV.
 
-**Seven live roles ship at launch** (real briefs supplied by Jordan, not placeholders),
-one detail page each:
+**Live roles** (real briefs supplied by Jordan, not placeholders), one detail page each:
 
 | Detail page | Role | Sector |
 |---|---|---|
@@ -182,8 +181,14 @@ one detail page each:
 | `job-regional-operations-director-data-centre.html` | Regional Operations Director – Data Centre Infrastructure | Critical Infrastructure & Data Centres |
 | `job-chief-operating-officer.html` | Chief Operating Officer (COO) | Renewables & Energy Storage |
 | `job-electrical-maintenance-engineer.html` | Electrical Maintenance Engineer – Commercial Building Services | Building Services & Facilities |
+| `job-key-account-manager-data-centre-solutions.html` | Key Account Manager – Data Centre Solutions | Critical Infrastructure & Data Centres |
 
-**Job detail page pattern** (all seven follow it):
+To add, edit, or remove a posting, use the **`job-listings` skill**
+(`.claude/skills/job-listings/SKILL.md`) — it documents the three places every job lives
+(detail page, `jobs.html` card, `JOBS` entry in `js/main.js`) and the exact templates/sector
+reference needed to keep them in sync.
+
+**Job detail page pattern** (all of the above follow it):
 1. Page hero — back-link to `jobs.html`, sector eyebrow, job title, meta pills
    (location, salary, employment type).
 2. **`.job-figure`** — a gradient + line-icon visual panel keyed to the role's sector,
@@ -240,11 +245,12 @@ and every section verbatim — in addition to the existing `?type=client|candida
 
 - **Stack:** static HTML + CSS + vanilla JS. No framework, no build step. Hostable on
   anything (GoDaddy, Netlify, Cloudflare Pages…).
-- **Files:** fourteen `.html` pages (six core pages + `jobs.html` + seven job detail
+- **Files:** fifteen `.html` pages (six core pages + `jobs.html` + eight job detail
   pages) · `css/styles.css` (design system) · `js/main.js` (nav, reveals, counters, streak
   draw, embers, timeline, form toggle, job sector filter, job application prefill) ·
   `images/` (brand reference JPEGs, `main-logo.png`, founder photos, Design1 doubles as OG
-  image).
+  image) · `.claude/skills/job-listings/SKILL.md` (workflow reference for adding/editing/
+  removing job postings).
 - **Branding:** `images/main-logo.png` — a transparent PNG cropped tightly to the wordmark
   (see §6.3 for how it was produced from the client's square source file) — is used as the
   nav and footer wordmark everywhere via `.brand-logo`, sized by height with its natural

@@ -567,6 +567,52 @@
           "Opportunity to work across a varied portfolio of commercial maintenance contracts within a supportive and professional environment."
         ] }
       ]
+    },
+    "key-account-manager-data-centre-solutions": {
+      title: "Key Account Manager – Data Centre Solutions",
+      sector: "Critical Infrastructure & Data Centres",
+      location: "United Kingdom (Hybrid)",
+      salary: "£90,000–£100,000 per annum + Uncapped Commission",
+      sections: [
+        { heading: "About the Role", paragraphs: [
+          "An exciting opportunity has arisen for an experienced Key Account Manager to join a growing organisation supplying solutions to the rapidly expanding data centre sector. This role is ideal for a commercially driven sales professional with a proven track record of developing strategic client relationships and winning high-value business within critical infrastructure.",
+          "You'll take ownership of key customer accounts while identifying new opportunities across the UK market, working closely with technical and commercial teams to deliver tailored solutions for some of the industry's largest operators and contractors."
+        ] },
+        { heading: "Key Responsibilities", items: [
+          "Develop and manage relationships with strategic accounts across the data centre industry.",
+          "Identify, pursue, and secure new business opportunities within existing and target customers.",
+          "Manage the full sales process, from initial engagement through to contract negotiation and project award.",
+          "Build long-term account growth strategies to maximise revenue and customer retention.",
+          "Work closely with engineering, operations, and commercial teams to deliver customer-focused solutions.",
+          "Prepare proposals, presentations, and commercial quotations.",
+          "Engage with senior stakeholders and decision-makers across client organisations.",
+          "Monitor market activity, competitor trends, and emerging opportunities within the data centre sector.",
+          "Maintain accurate sales forecasts and CRM records.",
+          "Represent the business at client meetings, exhibitions, and industry events."
+        ] },
+        { heading: "About You", paragraphs: [
+          "The successful candidate will have a strong background in business development or strategic account management within the data centre, electrical, critical infrastructure, or technical engineering sectors. You'll ideally have:"
+        ], items: [
+          "A proven history of winning and growing major customer accounts.",
+          "Experience selling technical or engineered products and solutions.",
+          "Excellent commercial awareness and negotiation skills.",
+          "Strong understanding of the data centre market and its key stakeholders.",
+          "Outstanding communication and relationship-building abilities.",
+          "The confidence to engage with senior executives and decision-makers.",
+          "Experience using CRM systems to manage opportunities and sales pipelines.",
+          "A degree in Engineering, Science, Business, or equivalent industry experience is advantageous."
+        ] },
+        { heading: "What's on Offer", items: [
+          "£90,000–£100,000 annual salary.",
+          "Uncapped commission structure.",
+          "Hybrid working.",
+          "Company pension scheme.",
+          "Ongoing training and career development.",
+          "Opportunity to work within one of the fastest-growing sectors in critical infrastructure.",
+          "Clear progression opportunities within a growing commercial team.",
+          "Supportive and collaborative working environment."
+        ] }
+      ]
     }
   };
 
