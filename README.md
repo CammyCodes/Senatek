@@ -2,7 +2,7 @@
 
 > Project reference for the Senatek Recruitment website: company research, brand system,
 > page-by-page content map, technical notes, deployment info and outstanding items.
-> Last updated: 20 July 2026 (v0.0.4).
+> Last updated: 21 July 2026 (v0.0.5).
 
 **Quick orientation for an agent picking this up cold:** static HTML/CSS/JS, no build
 step, no CMS, no backend — every page is a hand-authored file you edit directly. Live at
@@ -281,12 +281,35 @@ and every section verbatim — in addition to the existing `?type=client|candida
   inputs, `prefers-reduced-motion` support, `aria-live` form status.
 - **Responsive:** fluid type, grids collapse (4→2→1), split panels stack, nav becomes a
   full-screen menu below 900px. Verified at 375px and desktop widths.
-- **Mobile nav scroll-lock:** opening the mobile menu (`js/main.js`) pins `<body>` with
-  `position: fixed` at the current scroll offset and restores it (instantly, bypassing the
-  site's `scroll-behavior: smooth`) on close/link-click. Fixes a real bug where the
-  full-screen overlay rendered incorrectly (background content visible through it) when
-  opened partway down a page — the overlay itself was also simplified to a flat opaque
-  background (no `backdrop-filter`) to remove any remaining translucency risk.
+- **Mobile nav — three separate fixes** (the full-screen menu overlay `.nav-links` below
+  900px was surprisingly bug-prone; all three were needed):
+  1. **Scroll-lock** (`js/main.js`): opening the menu pins `<body>` with `position: fixed`
+     at the current scroll offset and restores it (instantly, `behavior: "instant"` to
+     bypass the site's `scroll-behavior: smooth`) on close/link-click, so the background
+     doesn't scroll behind the menu.
+  2. **Opaque overlay, item-only animation** (v0.0.5, `css/styles.css`): the overlay no
+     longer fades its whole self (`opacity 0→1`) — fading a solid-background element makes
+     the background translucent mid-transition, so page content bled through for ~0.4s.
+     Instead the backdrop is toggled via `visibility` (always fully opaque when shown) and
+     only the menu *items* animate (staggered opacity + translateY) on top of it. Also
+     makes the links non-focusable while hidden (a11y win).
+  3. **No `backdrop-filter` on the scrolled nav, on mobile** (v0.0.5, `css/styles.css`):
+     **the important one.** `.nav.scrolled` applies `backdrop-filter: blur(18px)`, and a
+     `backdrop-filter` (like `transform`/`filter`) makes its element the *containing block
+     for `position: fixed` descendants*. Since `.nav-links` is a fixed descendant of
+     `.nav`, whenever you opened the menu **while scrolled** the "full-screen" overlay was
+     sized to the ~82px nav bar instead of the viewport, and the menu items spilled over
+     the visible page for a split second (until the scroll-lock reset dropped the
+     `.scrolled` class and its blur). Fix: at ≤900px, `.nav.scrolled` uses a near-solid
+     `rgba(7,9,14,0.95)` background and **no** `backdrop-filter` — no blur, no containing
+     block, overlay always fills the viewport. Desktop keeps the blur (its `.nav-links`
+     is not `position: fixed`, so it was never affected). See §8 for the general gotcha.
+- **Cache-busting (v0.0.5):** the stylesheet is linked as `css/styles.css?v=0.0.5` on every
+  page. The `?v=` query is bumped whenever `styles.css` changes so browsers (and the Pages
+  CDN) fetch the new file instead of a stale cached copy. This matters especially when the
+  client previews via `file://` while iterating — browsers cache `file://` subresources
+  aggressively, so without the query bump an edit to the CSS may not show up on reload.
+  Keep the query in sync with the release version when you change the stylesheet.
 - **Native form control theming:** `color-scheme: dark` (root) plus explicit
   `<option>` background/color rules fix the sector `<select>` popup rendering with a
   white background in Chromium-based browsers.
@@ -335,6 +358,8 @@ and every section verbatim — in addition to the existing `?type=client|candida
 | `v0.0.4` | `5769b06` | Logo fixed properly: the v0.0.3 logo was a square JPEG with a visible black background box wherever it wasn't over pure black — cropped it to the wordmark band and matted it to a transparent PNG (`images/main-logo.png`) via Pillow. The 4 agent-drafted sample postings from v0.0.2 were removed and replaced with 7 real briefs supplied by the client, each keeping its own original section headers rather than a forced template. (The 4 removed postings later came back — see `b32c9a8`.) |
 | `v0.0.4` (same tag, later commits) | `71d6b90` | Added an 8th real role (Key Account Manager – Data Centre Solutions) and the `.claude/skills/job-listings/SKILL.md` skill so future job-posting changes don't require re-deriving the three-file pattern from scratch. |
 | `v0.0.4` (same tag, later commits) | `b32c9a8` | Restored the 4 postings removed in `5769b06` after Jordan confirmed they represent real roles Senatek has (they'd been drafted by the agent as samples, so the agent checked before re-listing them) — `jobs.html` now carries 12 live postings total. |
+| `v0.0.4` (same tag, later commits) | `621fb15` | README overhauled into a full agent handbook (this section, §8, quick-orientation header) — no site behaviour changed. |
+| `v0.0.5` | *(pending)* | Two real mobile-nav bugs found and fixed (see §5's "Mobile nav — three separate fixes"): (1) the full-screen menu overlay bled page content through for ~0.4s because it faded whole-element `opacity` including its own solid background — fixed by toggling the backdrop with `visibility` (always opaque) and animating only the menu items on top of it; (2) the real culprit for "only glitches when scrolled" — `.nav.scrolled`'s `backdrop-filter` made the nav the containing block for the fixed-position overlay, collapsing it down to the ~82px nav-bar height whenever the menu was opened while scrolled — fixed by dropping `backdrop-filter` (and using a near-solid background instead) on the scrolled nav at mobile widths only; desktop is unaffected. Stylesheet cache-busted to `?v=0.0.5` on every page. |
 
 ---
 
@@ -400,9 +425,19 @@ Hard-won specifics that aren't obvious from the code and have bitten before:
   screenshots, force it with
   `document.querySelectorAll('.reveal').forEach(e => e.classList.add('in'))` — otherwise
   below-the-fold sections screenshot as empty black.
-- **Don't reintroduce `backdrop-filter` on the mobile nav overlay** — it was deliberately
-  removed (see §5 mobile nav scroll-lock note) after rendering glitches; the flat opaque
-  `var(--bg)` background is intentional.
+- **`backdrop-filter`/`filter`/`transform` create a containing block for `position: fixed`
+  descendants.** This bit us twice on the mobile nav (see §5, "Mobile nav — three separate
+  fixes"): `.nav-links` is `position: fixed` and a DOM descendant of `.nav`, so whenever
+  `.nav` picked up `backdrop-filter` (its `.scrolled` state) the "full-screen" menu overlay
+  silently stopped sizing against the viewport and sized against the ~82px nav bar instead
+  — collapsing the menu for a fraction of a second, invisible unless caught in a live
+  screenshot or reported by an actual user tapping the actual page. **Don't reintroduce
+  `backdrop-filter`/`filter`/`transform` on `.nav` (or `.nav.scrolled`) at mobile widths**;
+  the flat opaque backgrounds there are intentional. More generally: if a `position: fixed`
+  element ever behaves as though it's positioned/sized relative to the wrong box, check
+  every ancestor for `transform`, `filter`, `backdrop-filter`, `perspective`, or
+  `will-change` naming one of those — any of them silently breaks the "fixed = relative to
+  viewport" assumption.
 - **Image processing:** no ImageMagick on this machine, but Python + Pillow is available
   via `python` (not `python3`). The logo transparency recipe is in §7.3.
 - **Windows environment quirks:** the repo lives on `Y:\Github\Senatek`; the shell used
