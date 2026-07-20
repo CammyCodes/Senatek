@@ -20,8 +20,8 @@ own section headers (e.g. "What You'll Be Doing" instead of "Key Responsibilitie
 those headers as given rather than forcing every posting into identical section names.
 
 The site is static HTML/CSS/JS with no build step and no CMS — every change is a direct file
-edit. Read `README.md` in the repo root first for the full site map and design-system
-reference; this skill only covers the jobs workflow.
+edit. Read `README.md` (site map, content, brand system) and `AGENT.md` (technical notes,
+deployment, working notes) in the repo root first; this skill only covers the jobs workflow.
 
 ## Sector reference
 
@@ -71,7 +71,7 @@ formatting mistakes from creeping in. Then update, in order:
   pin, salary tag, briefcase, and a clock icon if a fourth "working hours" pill is needed
 - `.job-figure svg.job-figure-icon` — paste the sector's icon markup from the table above
   (this is a placeholder visual, captioned "Real photography incoming" — leave the caption
-  as-is; it's a known, documented placeholder, see README §6)
+  as-is; it's a known, documented placeholder, see AGENT.md §3.4)
 - `.job-content` — one `<h2>` per section, in the source material's own order and using its
   own headers. For each bullet list use `<ul class="req-list">` with each `<li>` starting
   with the exact same checkmark SVG (copy it from any existing `<li>` — don't retype it) followed
@@ -164,11 +164,11 @@ is filled with the exact role text.
 
 After a jobs change:
 
-1. Update `README.md` to match: the job listing table and role count (§4), the file count
-   (§5), and — if the change is notable — the version history table (§6).
+1. Update `README.md`'s job listing table and role count (§4). If the change is notable,
+   also update `AGENT.md`'s file count (§1) and version history table (§2).
 2. `git add`, commit with a message describing what changed (which roles added/edited/removed).
 3. **Ask the user whether this change bumps the version tag.** Feature releases have been
-   tagged (`v0.0.1`–`v0.0.4` so far, annotated tags), but content-only job changes have
+   tagged (`v0.0.1`–`v0.0.5` so far, annotated tags), but content-only job changes have
    also shipped as plain commits on the current tag when the user said to keep the version
    — both are established. If tagging: `git tag -a v0.0.X -m "..."` then push both:
    `git push origin master && git push origin v0.0.X`. If not: just `git push origin master`.
