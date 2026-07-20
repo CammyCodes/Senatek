@@ -181,13 +181,15 @@ Four example postings ship at launch, one per sector, each its own detail page:
    is supplied — see §6).
 3. Two-column **body**: narrative copy + **Key Requirements** checklist (amber ticks) on
    the left; a **sticky apply box** on the right (*Apply Now* → `contact.html?type=
-   candidate&role=…`, *Email Your CV* mailto with the role in the subject line).
+   candidate&job=<slug>`, *Email Your CV* mailto with the role in the subject line).
 4. CTA band linking back to the full list / Register Your Interest.
 5. Per-role **`JobPosting` JSON-LD** (title, description, salary, location, employment
    type) for Google Jobs eligibility.
 
-The contact form (`js/main.js`) reads a `?role=` query param and pre-fills the message
-field with the role name, in addition to the existing `?type=client|candidate` toggle.
+The contact form (`js/main.js`) reads the `?job=<slug>` query param, looks up the matching
+entry in the `JOBS` data object, selects the matching **Sector**, and pre-fills the message
+field with the full role — title, location, salary, description, Key Requirements and
+closing line — verbatim, in addition to the existing `?type=client|candidate` toggle.
 
 ### `clients.html` — For Clients
 1. Page hero — "Hires that stick" + *Brief a Role* CTA.
@@ -212,6 +214,10 @@ field with the role name, in addition to the existing `?type=client|candidate` t
      confidential-CV note.
    - Hidden `enquiry_type` field records the mode; `?type=client|candidate` in the URL
      pre-selects the toggle (used by CTAs across the site).
+   - `?job=<slug>` (set by every job detail page's Apply button) pre-selects the matching
+     **Sector** and pre-fills the message field with the full role — title, location,
+     salary, description, Key Requirements and closing line — verbatim, sourced from a
+     `JOBS` data object in `js/main.js` that mirrors each `job-*.html` page.
 
 ---
 
@@ -221,8 +227,13 @@ field with the role name, in addition to the existing `?type=client|candidate` t
   anything (GoDaddy, Netlify, Cloudflare Pages…).
 - **Files:** eleven `.html` pages (six core pages + `jobs.html` + four job detail pages) ·
   `css/styles.css` (design system) · `js/main.js` (nav, reveals, counters, streak draw,
-  embers, timeline, form toggle, job sector filter, `?role=` prefill) ·
-  `images/` (brand reference JPEGs, Design1 doubles as OG image).
+  embers, timeline, form toggle, job sector filter, job application prefill) ·
+  `images/` (brand reference JPEGs, `main-logo.jpeg`, founder photos, Design1 doubles as
+  OG image).
+- **Branding:** `images/main-logo.jpeg` (square, black background) is used as the nav and
+  footer wordmark everywhere via `.brand-logo` — a CSS `object-fit: cover` crop (see
+  `.brand-logo` in styles.css) trims the square mark down to just the wordmark band, so
+  it reads as a clean horizontal logo lockup rather than a square logo in a wide slot.
 - **SEO:** unique title/meta description + OG tags per page; Organization JSON-LD on the
   home page (includes founder, contact, areaServed, LinkedIn sameAs); `JobPosting` JSON-LD
   on each job detail page; semantic markup; favicon is an inline SVG (orange apex mark on
@@ -231,29 +242,42 @@ field with the role name, in addition to the existing `?type=client|candidate` t
   inputs, `prefers-reduced-motion` support, `aria-live` form status.
 - **Responsive:** fluid type, grids collapse (4→2→1), split panels stack, nav becomes a
   full-screen menu below 900px. Verified at 375px and desktop widths.
+- **Mobile nav scroll-lock:** opening the mobile menu (`js/main.js`) pins `<body>` with
+  `position: fixed` at the current scroll offset and restores it (instantly, bypassing the
+  site's `scroll-behavior: smooth`) on close/link-click. Fixes a real bug where the
+  full-screen overlay rendered incorrectly (background content visible through it) when
+  opened partway down a page — the overlay itself was also simplified to a flat opaque
+  background (no `backdrop-filter`) to remove any remaining translucency risk.
+- **Native form control theming:** `color-scheme: dark` (root) plus explicit
+  `<option>` background/color rules fix the sector `<select>` popup rendering with a
+  white background in Chromium-based browsers.
 
 ---
 
 ## 6. Outstanding items / swap-in points
 
-1. **Founder photo** — `about.html` shows a styled "JC" placeholder. Replace with
-   `assets/jordan-camm.jpg` (a comment in the file marks the exact spot):
-   `<img src="assets/jordan-camm.jpg" alt="Jordan Camm, Director of Senatek Recruitment">`
+1. **Founder photo** — done (v0.0.3). `about.html`'s founder frame now shows
+   `images/Jordan1.jpeg`. A second option, `images/Jordan2.jpeg`, is also in the repo if a
+   different shot is preferred later — just swap the `src`.
 2. **Contact form backend** — form currently shows a client-side success message only.
    Point the form `action` (and the marked handler in `js/main.js`) at the mail endpoint
    when hosting is arranged; submissions should deliver to **Jordan@senatekrecruitment.com**.
    All fields are named and ready (`name`, `email`, `phone`, `company` / `current_role`,
    `sector`, `message`, hidden `enquiry_type`).
-3. **Logo files** — no vector/PNG logo exists; the wordmark is coded in HTML/CSS. If a
-   proper logo is produced later, swap it into `.brand` in the nav/footer.
+3. **Logo files** — done (v0.0.3). `images/main-logo.jpeg` is now used everywhere via
+   `.brand-logo` (see §5). If a vector/transparent version is produced later, swap the
+   `src` in `.brand` — no CSS changes needed as long as the new asset is roughly square.
 4. **Job posting photography** — each job detail page's `.job-figure` banner is currently
    a styled gradient + line-icon placeholder (captioned "Real photography incoming"),
-   matching the founder-photo treatment in §6.1. Swap in real site/office photography per
-   role when available — the markup comment in each `job-*.html` marks the spot.
+   matching the founder-photo treatment in §6.1 pre-swap. Swap in real site/office
+   photography per role when available — the markup comment in each `job-*.html` marks
+   the spot.
 5. **Job postings are illustrative** — the four roles on `jobs.html` are example/sample
    postings drafted to demonstrate the page, not live vacancies. Replace with real briefs
    (and add/remove postings) as roles come in; each is a self-contained HTML file so this
-   is a copy-and-content edit, no rebuild needed.
+   is a copy-and-content edit, no rebuild needed. Remember to also update (or add/remove)
+   the matching entry in the `JOBS` object in `js/main.js` so the Apply prefill stays in
+   sync with the page content.
 6. **Future additions (out of scope for v1):** contract/interim services, testimonials/
    client logos, insights/blog, privacy policy page (worth adding before the form goes
    live), analytics, and (longer-term) turning the jobs board into a CMS-backed listing

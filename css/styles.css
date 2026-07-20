@@ -43,6 +43,7 @@ html {
   -webkit-text-size-adjust: 100%;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  color-scheme: dark;
 }
 
 html::-webkit-scrollbar { display: none; }
@@ -221,33 +222,15 @@ h3 { font-size: clamp(1.25rem, 2.4vw, 1.6rem); }
 .nav.scrolled .nav-inner { height: 66px; }
 
 /* Wordmark */
-.brand { display: flex; flex-direction: column; line-height: 1; gap: 0.28rem; z-index: 102; }
-.brand-name {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 1.42rem;
-  letter-spacing: 0.14em;
-  color: var(--text);
+.brand { display: flex; align-items: center; line-height: 1; z-index: 102; }
+.brand-logo {
+  display: block;
+  height: 34px;
+  width: 158px;
+  object-fit: cover;
+  object-position: center 49%;
 }
-.brand-name .a-mark { position: relative; }
-.brand-name .a-mark::after {
-  content: "";
-  position: absolute;
-  top: -0.08em;
-  left: 50%;
-  transform: translateX(-50%);
-  border-left: 0.18em solid transparent;
-  border-right: 0.18em solid transparent;
-  border-bottom: 0.16em solid var(--amber);
-}
-.brand-sub {
-  font-family: var(--font-display);
-  font-size: 0.55rem;
-  font-weight: 600;
-  letter-spacing: 0.52em;
-  color: var(--amber);
-  text-transform: uppercase;
-}
+.footer .brand-logo { height: 42px; width: 195px; }
 
 .nav-links { display: flex; align-items: center; gap: 2.1rem; }
 .nav-links a:not(.btn) {
@@ -312,9 +295,7 @@ h3 { font-size: clamp(1.25rem, 2.4vw, 1.6rem); }
     flex-direction: column;
     justify-content: center;
     gap: 1.6rem;
-    background: rgba(7, 9, 14, 0.96);
-    -webkit-backdrop-filter: blur(24px);
-    backdrop-filter: blur(24px);
+    background: var(--bg);
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.4s;
@@ -908,6 +889,11 @@ h3 { font-size: clamp(1.25rem, 2.4vw, 1.6rem); }
   transition: border-color 0.3s, box-shadow 0.3s;
 }
 .field textarea { min-height: 140px; resize: vertical; }
+.field select { color-scheme: dark; }
+.field select option {
+  background: var(--bg-panel);
+  color: var(--text);
+}
 .field input:focus,
 .field textarea:focus,
 .field select:focus {
