@@ -3,8 +3,9 @@
 > Technical implementation details, deployment & hosting info, versioning history, and
 > hard-won working notes for anyone (human or agent) doing further development on this
 > site. For company research, brand system, and page-by-page content map, see
-> **[README.md](README.md)**.
-> Last updated: 21 July 2026 (v0.0.5).
+> **[README.md](README.md)**. For generating new site imagery, see
+> **[IMAGE-BRIEF.md](IMAGE-BRIEF.md)**.
+> Last updated: 21 July 2026 (v0.0.8).
 
 **Quick orientation for an agent picking this up cold:** static HTML/CSS/JS, no build
 step, no CMS, no backend — every page is a hand-authored file you edit directly. Live at
@@ -25,9 +26,41 @@ from the code alone.
 - **Files:** nineteen `.html` pages (six core pages + `jobs.html` + twelve job detail
   pages) · `css/styles.css` (design system) · `js/main.js` (nav, reveals, counters, streak
   draw, embers, timeline, form toggle, job sector filter, job application prefill, floating
-  apply pill) · `images/` (brand reference JPEGs, `main-logo.png`, founder photos, Design1
-  doubles as OG image) · `.claude/skills/job-listings/SKILL.md` (workflow reference for
-  adding/editing/removing job postings).
+  apply pill) · `images/` (brand reference JPEGs, `main-logo.png`, founder photos, page
+  hero/section imagery, `og-default.jpg` as the fallback OG card) · `images/sectors/`
+  (sector photography — see "Sector imagery" below) · `IMAGE-BRIEF.md` (generation brief
+  for producing new site imagery) · `tools/process_images.py` (Pillow crop/compress
+  pipeline) · `.claude/skills/job-listings/SKILL.md` (workflow reference for
+  adding/editing/removing job postings) · `.claude/launch.json` (local static-server
+  config for the preview tooling).
+- **Sector imagery (v0.0.7+):** `images/sectors/` holds three files per sector —
+  `<sector>-og.jpg` (the full 1672×941 client banner, wordmark and sector title baked in),
+  `-wide.jpg` (21:9) and `-tile.jpg` (4:3). The `-og` file is the untouched original and
+  is the **master** for any future re-crop. Sectors are keyed by the same slugs as
+  `data-sector` in `jobs.html`: `power-energy`, `data-centres`, `building-services`,
+  `renewables`. **All four sectors are complete as of v0.0.8.** The first three came from
+  client-supplied banners; `renewables` was generated from IMAGE-BRIEF.md item A1 and its
+  branded `-og.jpg` composited in-repo (see §5 of the brief) — so `renewables-source.jpg`,
+  the un-branded master, also lives in that folder.
+  - **Why the crops exist:** the supplied banners have the SENATEK wordmark *and* the
+    sector title rendered into the left ~40% of the frame. Used whole on a page they'd put
+    a third logo on screen beside an `<h2>` that already says the same words. The
+    derivatives crop from `x0 = 700` (of 1672), which drops the text zone entirely and
+    keeps only the photographic right-hand side. 700 was found by scanning pixel columns
+    for white/amber type, then confirmed visually — it also leaves the orange arc clipping
+    the lower-left corner, which reads as a deliberate echo of the hero streak. Don't crop
+    tighter than ~700 without re-checking; don't crop looser or the title bleeds in.
+  - **Where the full banner *is* right:** `og:image`. The baked-in branding is an asset on
+    a LinkedIn share card, so **all twelve** job detail pages point at their sector's
+    `-og.jpg`. The seven remaining pages (six core + `jobs.html`) use `images/og-default.jpg`.
+    `Design1.jpeg` is no longer referenced by any page — it's kept only as a design
+    reference (see README.md §2).
+- **Photo-capable visual slots:** `.sector-visual` (4:3, 16:9 ≤860px) and `.job-figure`
+  (21:9) both keep their gradient + grid-overlay placeholder **by default**; adding
+  `.has-photo` alongside an `<img>` swaps in a real photo (`object-fit: cover`) and
+  replaces the technical grid with a soft vignette. This is deliberate — imagery lands
+  sector by sector, so a slot with no artwork yet must still render correctly. Don't
+  delete the placeholder CSS.
 - **Branding:** `images/main-logo.png` — a transparent PNG cropped tightly to the wordmark
   (see §3.3 for how it was produced from the client's square source file) — is used as the
   nav and footer wordmark everywhere via `.brand-logo`, sized by height with its natural
@@ -77,7 +110,7 @@ from the code alone.
   force-shown in test scripts), so this feature can't be exercised through it; verify in a
   real browser at a mobile width.
 - **Cache-busting (v0.0.5+):** both shared assets are linked with a version query —
-  `css/styles.css?v=0.0.6` and `js/main.js?v=0.0.6` — on every page. The `?v=` is bumped
+  `css/styles.css?v=0.0.8` and `js/main.js?v=0.0.8` — on every page. The `?v=` is bumped
   whenever `styles.css` **or** `js/main.js` changes so browsers (and the Pages CDN) fetch
   the new file instead of a stale cached copy. This matters especially when the client
   previews via `file://` while iterating — browsers cache `file://` subresources
@@ -134,6 +167,8 @@ from the code alone.
 | `v0.0.4` (same tag, later commits) | `621fb15` | README overhauled into a full agent handbook — no site behaviour changed. Later split into README.md (business/content reference) + this file (technical/agent reference) — see the current commit. |
 | `v0.0.5` | `094c619` | Two real mobile-nav bugs found and fixed (see §1's "Mobile nav — three separate fixes"): (1) the full-screen menu overlay bled page content through for ~0.4s because it faded whole-element `opacity` including its own solid background — fixed by toggling the backdrop with `visibility` (always opaque) and animating only the menu items on top of it; (2) the real culprit for "only glitches when scrolled" — `.nav.scrolled`'s `backdrop-filter` made the nav the containing block for the fixed-position overlay, collapsing it down to the ~82px nav-bar height whenever the menu was opened while scrolled — fixed by dropping `backdrop-filter` (and using a near-solid background instead) on the scrolled nav at mobile widths only; desktop is unaffected. Stylesheet cache-busted to `?v=0.0.5` on every page. |
 | — | `9357e63` | Docs reorg: split the old single README into README.md (business/content reference) + AGENT.md (this file — technical/dev reference), and removed all references to the external site the design was benchmarked against (client request). No site behaviour changed. |
+| `v0.0.7` | — | First real photography pass: the three client-supplied sector banners (Power & Energy, Data Centres, Building Services) processed into `images/sectors/` as `-og`/`-wide`/`-tile` derivatives and wired into `sectors.html` and 9 of 12 job detail pages; `.has-photo` pattern added; [IMAGE-BRIEF.md](IMAGE-BRIEF.md) authored. **Never shipped as a standalone commit** — it was still in the working tree when the v0.0.8 rollout landed on top, so both phases went out together in the v0.0.8 commit below. No `v0.0.7` tag exists. |
+| `v0.0.8` | _(pending)_ | **Full site photography rollout (IMAGE-BRIEF.md complete).** 14 master images generated and processed into `images/` & `images/sectors/`. Renewables sector source, wide, tile, and composited branded OG card produced via Pillow (`renewables-og.jpg`); page heroes added to `about.html`, `clients.html`, `candidates.html`, `contact.html`, and `jobs.html`; section imagery added to client & candidate journey steps; split panels added to `index.html`. Generic Open Graph fallback updated to `og-default.jpg` across core pages. Asset query parameters bumped to `?v=0.0.8` across all 19 HTML files. |
 | `v0.0.6` | `a259873` | Floating "Apply Now" pill on job detail pages (mobile/tablet) — a fixed bottom-centre CTA injected by `js/main.js` that follows the reader, drops away when the real `.apply-box` is on screen, and springs back up with a liquid-glass bounce + idle float. See §1's "Floating Apply Now pill". Also extended cache-busting to `js/main.js` (both shared assets now carry `?v=0.0.6`). |
 
 ---
@@ -156,11 +191,12 @@ from the code alone.
    scroll position or backdrop. `.brand-logo` sizes it by height with natural aspect ratio.
    If a new logo file is supplied later, re-run the same crop-and-matte process (or ask for
    the source with a transparent background directly) before dropping it in.
-4. **Job posting photography** — each job detail page's `.job-figure` banner is currently
-   a styled gradient + line-icon placeholder (captioned "Real photography incoming"),
-   matching the founder-photo treatment in §3.1 pre-swap. Swap in real site/office
-   photography per role when available — the markup comment in each `job-*.html` marks
-   the spot.
+4. **Job posting photography** — **done, 12 of 12 (v0.0.8).** Every job detail page's
+   `.job-figure` banner shows its sector's `-wide.jpg`, mapped by the same sector as the
+   page's `data-sector` in `jobs.html`. The "Real photography incoming" placeholder is
+   gone from all twelve. Note these are **sector** images, not role-specific photography —
+   four images cover twelve roles. Swapping in genuine site/office shots per role is still
+   an option if the client supplies them.
 5. **Job postings are live** — done (v0.0.4). The twelve roles on `jobs.html` (see
    README.md §4 table) are live postings. Two origins worth knowing about: eight arrived
    as **verbatim briefs from Jordan** (their wording must never be paraphrased), and four
@@ -213,8 +249,22 @@ Hard-won specifics that aren't obvious from the code and have bitten before:
   every ancestor for `transform`, `filter`, `backdrop-filter`, `perspective`, or
   `will-change` naming one of those — any of them silently breaks the "fixed = relative to
   viewport" assumption.
-- **Image processing:** no ImageMagick on this machine, but Python + Pillow is available
-  via `python` (not `python3`). The logo transparency recipe is in §3.3.
+- **Image processing:** no ImageMagick on this machine, and **no numpy** — but Python +
+  Pillow is available via `python` (not `python3`). The logo transparency recipe is in
+  §3.3; the sector crop recipe (and the `crop_ratio`/`save` helpers) is in
+  [IMAGE-BRIEF.md](IMAGE-BRIEF.md) §4. Export JPEGs with
+  `quality=82, optimize=True, progressive=True` and keep them under ~150 KB.
+- **Never ask an image model to render the wordmark.** Image models garble lettering, and
+  the result won't match `main-logo.png`. Generated imagery is always text-free and
+  logo-free; branding is composited in-repo afterwards (see IMAGE-BRIEF.md §5). This is
+  rule 1–2 of the brief and the reason the on-page sector crops exist at all.
+- **Adding an image to a page:** always set `width`/`height` (intrinsic pixel size, so the
+  browser reserves space and avoids layout shift), `decoding="async"`, real descriptive
+  `alt`, and `loading="lazy"` for anything below the fold — but **not** on the first
+  above-the-fold image, where lazy-loading delays the LCP. Note the browser-preview pane
+  doesn't composite frames, so native lazy-loading never fires there and images below the
+  fold will report `complete: false` — that's a tooling artifact, not a bug. Verify image
+  loading in a real browser, or HEAD-fetch the URLs directly.
 - **Windows environment quirks:** the repo lives on `Y:\Github\Senatek`; the shell used
   for automation is Git Bash (POSIX-style paths work). Line-ending warnings
   (`LF will be replaced by CRLF`) on commit are normal and harmless here.

@@ -699,6 +699,36 @@ h3 { font-size: clamp(1.25rem, 2.4vw, 1.6rem); }
   -webkit-mask-image: radial-gradient(circle at 50% 50%, black, transparent 80%);
 }
 
+/* ---------- Photo-capable visual slots ----------
+   Shared by .sector-visual (4/3, sectors.html) and .job-figure (21/9, job-*.html).
+   Both keep their gradient + grid placeholder by default; adding .has-photo swaps it
+   for a real image. This is deliberate — imagery is landing sector by sector (see
+   IMAGE-BRIEF.md), so any slot without artwork yet must still render correctly. */
+.sector-visual img,
+.job-figure img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+.sector-visual.has-photo,
+.job-figure.has-photo {
+  background: var(--bg-panel);
+}
+/* Swap the technical grid overlay for a soft vignette so the photo sits into the page
+   instead of ending at a hard rectangular edge. */
+.sector-visual.has-photo::after,
+.job-figure.has-photo::after {
+  background-image:
+    linear-gradient(to top, rgba(7, 9, 14, 0.5), transparent 45%),
+    radial-gradient(circle at 50% 50%, transparent 55%, rgba(7, 9, 14, 0.4));
+  background-size: auto;
+  mask-image: none;
+  -webkit-mask-image: none;
+}
+
 .sector-copy h2 { margin-bottom: 1rem; }
 .sector-copy > p { color: var(--text-dim); margin-bottom: 1.6rem; }
 
@@ -1357,3 +1387,56 @@ h3 { font-size: clamp(1.25rem, 2.4vw, 1.6rem); }
 @media (prefers-reduced-motion: reduce) {
   .floating-apply.show .floating-apply-btn { animation: none; }
 }
+
+/* ---------- Enhanced Imagery Utility Classes ---------- */
+.page-hero.has-bg {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  isolation: isolate;
+}
+.page-hero.has-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(180deg, rgba(7, 9, 14, 0.82) 0%, rgba(7, 9, 14, 0.94) 100%),
+              radial-gradient(ellipse at 80% 20%, transparent 20%, var(--bg) 85%);
+  pointer-events: none;
+}
+
+.split-panel.has-bg {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+}
+.split-panel.has-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(7, 9, 14, 0.92), rgba(7, 9, 14, 0.85));
+  z-index: 0;
+}
+.split-panel.has-bg > * {
+  position: relative;
+  z-index: 1;
+}
+
+.section-figure {
+  position: relative;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--line);
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  background: var(--bg-panel);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+}
+.section-figure img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+

@@ -2,10 +2,11 @@
 
 > Project reference for the Senatek Recruitment website: company research, brand system,
 > and page-by-page content map.
-> Last updated: 21 July 2026.
+> Last updated: 21 July 2026 (v0.0.8).
 
 For technical implementation details, deployment/hosting info, versioning, and developer
-working notes, see **[AGENT.md](AGENT.md)**.
+working notes, see **[AGENT.md](AGENT.md)**. For generating new site imagery, see
+**[IMAGE-BRIEF.md](IMAGE-BRIEF.md)**.
 
 ---
 
@@ -76,9 +77,37 @@ postings as of v0.0.4 (see §4).
 
 ### Design references
 - `images/Design1.jpeg` — banner: logo, four sector icons, energy-sunset imagery,
-  light-streak arc motif. Also used as the site's Open Graph share image.
+  light-streak arc motif. Was the site-wide Open Graph image until v0.0.8; **no longer
+  referenced by any page** (the fallback card is now `images/og-default.jpg`). Kept as a
+  design reference.
 - `images/Design2.jpeg` — business-card style layout: wordmark (orange apex on the A),
   Jordan's contact details, tagline, sector icon row.
+
+### Sector photography
+Client-supplied 16:9 sector banners — dark, sunset-lit industrial photography with the
+light-streak arc sweeping across the frame, the wordmark and the sector title set into the
+left ~40%. Held in `images/sectors/` as three files per sector:
+
+| File | Use |
+|---|---|
+| `<sector>-og.jpg` | The full banner, branding intact — **Open Graph cards only** |
+| `<sector>-wide.jpg` | 21:9 crop, photography only — job detail page banners |
+| `<sector>-tile.jpg` | 4:3 crop, photography only — `sectors.html` sector rows |
+
+The crops deliberately discard the branded left-hand panel: on-page, the wordmark is
+already in the nav and footer and the sector name is already the heading, so the full
+banner would triple up on both. Off-page, on a share card, that same branding is exactly
+what you want.
+
+**All four sectors are complete as of v0.0.8.** Power & Energy, Data Centres and Building
+Services came from client-supplied banners; Renewables & Energy Storage was generated to
+match and its branded share card composited in-repo, so that sector also keeps
+`renewables-source.jpg` (the un-branded master).
+
+Beyond the sectors, v0.0.8 added page hero backgrounds (`hero-*.jpg`), client/candidate
+journey imagery, home-page split-panel textures and a generic `og-default.jpg` share card.
+For the style rules, prompts, naming and post-processing behind all of it — and before
+generating anything new — see **[IMAGE-BRIEF.md](IMAGE-BRIEF.md)**.
 
 ---
 
@@ -160,8 +189,9 @@ Explore links, Sector links, contact details, company number line).
 ### `sectors.html` — Sectors
 1. Page hero — "Four sectors. Total focus."
 2. Four alternating **sector rows** (anchors: `#power-energy`, `#data-centres`,
-   `#building-services`, `#renewables`), each with a glowing icon panel, sector narrative
-   and pill **role tags** (roles listed in §2).
+   `#building-services`, `#renewables`), each with a visual panel, sector narrative
+   and pill **role tags** (roles listed in §2). All four panels show sector photography
+   (see "Sector photography" in §2).
 3. CTA band with both client and candidate CTAs.
 
 ### `jobs.html` — Job Opportunities
@@ -199,9 +229,10 @@ reference needed to keep them in sync.
 **Job detail page pattern** (all of the above follow it):
 1. Page hero — back-link to `jobs.html`, sector eyebrow, job title, meta pills
    (location, salary, employment type).
-2. **`.job-figure`** — a gradient + line-icon visual panel keyed to the role's sector,
-   captioned *"Real photography incoming"* (placeholder until real site/office photography
-   is supplied — see AGENT.md §3.4).
+2. **`.job-figure`** — a 21:9 banner showing the role's **sector photography**
+   (`images/sectors/<sector>-wide.jpg`, keyed to the page's `data-sector`). Four images
+   cover all twelve roles; swapping in role-specific site/office shots is still an option
+   if the client supplies them (see AGENT.md §3.4).
 3. Two-column **body**: narrative copy in named sections (each role keeps its own original
    section headers as supplied — e.g. "Key Responsibilities" vs "What You'll Be Doing",
    "Requirements" vs "About You" vs "What We're Looking For", "Benefits" vs "Salary &
