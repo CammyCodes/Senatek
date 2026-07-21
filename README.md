@@ -2,7 +2,7 @@
 
 > Project reference for the Senatek Recruitment website: company research, brand system,
 > and page-by-page content map.
-> Last updated: 21 July 2026 (v0.0.8).
+> Last updated: 21 July 2026 (v0.0.9).
 
 For technical implementation details, deployment/hosting info, versioning, and developer
 working notes, see **[AGENT.md](AGENT.md)**. For generating new site imagery, see

@@ -1208,7 +1208,12 @@ h3 { font-size: clamp(1.25rem, 2.4vw, 1.6rem); }
 .job-hero-meta li svg { width: 17px; height: 17px; color: var(--amber); flex: 0 0 auto; }
 
 .back-link {
-  display: inline-flex;
+  /* Block-level, not inline-flex: the sector .eyebrow that follows is itself inline-flex,
+     so an inline back-link let the two share a line ("← All Opportunities — SECTOR") and
+     silently swallowed the margin-bottom below. width:fit-content keeps the hover/click
+     target hugging the text instead of spanning the container. */
+  display: flex;
+  width: fit-content;
   align-items: center;
   gap: 0.5rem;
   font-family: var(--font-display);

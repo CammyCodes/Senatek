@@ -5,7 +5,7 @@
 > site. For company research, brand system, and page-by-page content map, see
 > **[README.md](README.md)**. For generating new site imagery, see
 > **[IMAGE-BRIEF.md](IMAGE-BRIEF.md)**.
-> Last updated: 21 July 2026 (v0.0.8).
+> Last updated: 21 July 2026 (v0.0.9).
 
 **Quick orientation for an agent picking this up cold:** static HTML/CSS/JS, no build
 step, no CMS, no backend — every page is a hand-authored file you edit directly. Live at
@@ -110,7 +110,7 @@ from the code alone.
   force-shown in test scripts), so this feature can't be exercised through it; verify in a
   real browser at a mobile width.
 - **Cache-busting (v0.0.5+):** both shared assets are linked with a version query —
-  `css/styles.css?v=0.0.8` and `js/main.js?v=0.0.8` — on every page. The `?v=` is bumped
+  `css/styles.css?v=0.0.9` and `js/main.js?v=0.0.9` — on every page. The `?v=` is bumped
   whenever `styles.css` **or** `js/main.js` changes so browsers (and the Pages CDN) fetch
   the new file instead of a stale cached copy. This matters especially when the client
   previews via `file://` while iterating — browsers cache `file://` subresources
@@ -168,6 +168,7 @@ from the code alone.
 | `v0.0.5` | `094c619` | Two real mobile-nav bugs found and fixed (see §1's "Mobile nav — three separate fixes"): (1) the full-screen menu overlay bled page content through for ~0.4s because it faded whole-element `opacity` including its own solid background — fixed by toggling the backdrop with `visibility` (always opaque) and animating only the menu items on top of it; (2) the real culprit for "only glitches when scrolled" — `.nav.scrolled`'s `backdrop-filter` made the nav the containing block for the fixed-position overlay, collapsing it down to the ~82px nav-bar height whenever the menu was opened while scrolled — fixed by dropping `backdrop-filter` (and using a near-solid background instead) on the scrolled nav at mobile widths only; desktop is unaffected. Stylesheet cache-busted to `?v=0.0.5` on every page. |
 | — | `9357e63` | Docs reorg: split the old single README into README.md (business/content reference) + AGENT.md (this file — technical/dev reference), and removed all references to the external site the design was benchmarked against (client request). No site behaviour changed. |
 | `v0.0.7` | — | First real photography pass: the three client-supplied sector banners (Power & Energy, Data Centres, Building Services) processed into `images/sectors/` as `-og`/`-wide`/`-tile` derivatives and wired into `sectors.html` and 9 of 12 job detail pages; `.has-photo` pattern added; [IMAGE-BRIEF.md](IMAGE-BRIEF.md) authored. **Never shipped as a standalone commit** — it was still in the working tree when the v0.0.8 rollout landed on top, so both phases went out together in the v0.0.8 commit below. No `v0.0.7` tag exists. |
+| `v0.0.9` | _(pending)_ | Job detail page hero fix: the back-link and the sector eyebrow rendered on the **same line** ("← All Opportunities — RENEWABLES & ENERGY STORAGE"). Both were `display: inline-flex`, so the two inline-level boxes shared a line and the back-link's `margin-bottom` was silently swallowed. Fixed by making `.back-link` `display: flex` with `width: fit-content` — block-level so the eyebrow drops to its own line, fit-content so the hover/click target still hugs the text. `.eyebrow` was left alone deliberately: it is used in 40+ places site-wide. Cache-busted to `?v=0.0.9`. |
 | `v0.0.8` | `11c73dd` | **Full site photography rollout (IMAGE-BRIEF.md complete).** 14 master images generated and processed into `images/` & `images/sectors/`. Renewables sector source, wide, tile, and composited branded OG card produced via Pillow (`renewables-og.jpg`); page heroes added to `about.html`, `clients.html`, `candidates.html`, `contact.html`, and `jobs.html`; section imagery added to client & candidate journey steps; split panels added to `index.html`. Generic Open Graph fallback updated to `og-default.jpg` across core pages. Asset query parameters bumped to `?v=0.0.8` across all 19 HTML files. |
 | `v0.0.6` | `a259873` | Floating "Apply Now" pill on job detail pages (mobile/tablet) — a fixed bottom-centre CTA injected by `js/main.js` that follows the reader, drops away when the real `.apply-box` is on screen, and springs back up with a liquid-glass bounce + idle float. See §1's "Floating Apply Now pill". Also extended cache-busting to `js/main.js` (both shared assets now carry `?v=0.0.6`). |
 
